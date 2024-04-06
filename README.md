@@ -1,6 +1,7 @@
 # E-Commerce Product Listing Application
 
 This is a microservice-based e-commerce application for displaying products by category asynchronously.
+WebApplication1 folder is unnecessary, just ignore it :)
 
 ## Quick Start
 
