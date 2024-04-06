@@ -12,6 +12,14 @@ WebApplication1 folder is unnecessary, just ignore it :)
 2. Set up database connection strings in `appsettings.json` for both Web and API projects.
 3. Run the solution in Visual Studio.
 
+## Database Migration
+
+To apply database migrations, use the Package Manager Console in Visual Studio:
+
+1. Open the Package Manager Console.
+2. Select the project containing your DbContext as the Default Project.
+3. Run Add-Migration `ExampleMigration` and `Update-Database`. This applies any pending migrations to the database and creates the database if it does not exist.
+   
 ## Features
 
 - Asynchronous product display.
