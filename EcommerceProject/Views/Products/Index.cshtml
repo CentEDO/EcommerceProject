@@ -1,0 +1,106 @@
+﻿@{
+    ViewData["Title"] = "Ürün Listesi";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        #productsContainer {
+            background-color: #ffeadb; 
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <h2>@ViewData["Title"]</h2>
+
+        <form id="categoryFilterForm" class="mb-4">
+            <div class="form-row align-items-center">
+                <div class="col-auto">
+                    <select id="categorySelect" class="form-control">
+                        <option value="">Tüm Kategoriler</option>
+
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-primary" onclick="filterProducts()">Filtrele</button>
+                </div>
+            </div>
+        </form>
+
+        <div id="productsContainer" class="row">
+            <!-- The products will be listed here with AJAX-->
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        async function filterProducts() {
+            const categoryId = document.getElementById('categorySelect').value;
+            let url = categoryId ? `https://localhost:7198/api/products/GetProductsByCategory/${categoryId}` : 'https://localhost:7198/api/products';
+            loadProducts(url);
+        }
+
+        async function loadProducts(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const products = await response.json();
+                const productsContainer = document.getElementById('productsContainer');
+                productsContainer.innerHTML = ''; // Ürün konteynerını temizle
+
+                products.forEach(product => {
+                    const productElement = document.createElement('div');
+                    productElement.className = 'col-md-4 mb-3';
+                    productElement.innerHTML = `
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">${product.name}</h5>
+                                    <p class="card-text">Fiyat: ${product.price} TL</p>
+                                </div>
+                            </div>
+                        `;
+                    productsContainer.appendChild(productElement);
+                });
+            } catch (error) {
+                console.error('Ürünler yüklenirken bir hata oluştu:', error);
+            }
+        }
+
+        async function loadCategories() {
+            const url = 'https://localhost:7198/api/categories';
+            try {
+                const response = await fetch(url);
+                const categories = await response.json();
+                const categorySelect = document.getElementById('categorySelect');
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    categorySelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Kategoriler yüklenirken bir hata oluştu:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            loadProducts('https://localhost:7198/api/products');
+            loadCategories();
+        });
+    </script>
+
+</body>
+</html>
