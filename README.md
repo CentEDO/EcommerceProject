@@ -18,7 +18,7 @@ To apply database migrations, use the Package Manager Console in Visual Studio:
 
 1. Open the Package Manager Console.
 2. Select the project containing your DbContext as the Default Project.
-3. Run Add-Migration `ExampleMigration` and `Update-Database`. This applies any pending migrations to the database and creates the database if it does not exist.
+3. Run `Add-Migration ExampleMigration` and `Update-Database`. This applies any pending migrations to the database and creates the database if it does not exist.
    
 ## Features
 
